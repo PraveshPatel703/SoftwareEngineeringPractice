@@ -27,7 +27,6 @@ class BankAccountTest {
         assertFalse( BankAccount.isEmailValid(""));
     }
 
-    //test comment
     @Test
     void isEmailShouldFailTest(){
         assertFalse(BankAccount.isEmailValid("@@spectrum.ddd"));
