@@ -28,6 +28,23 @@ class BankAccountTest {
     }
 
     @Test
+    void isEmailShouldFailTest(){
+        assertFalse(BankAccount.isEmailValid("@@spectrum.ddd"));
+        assertFalse(BankAccount.isEmailValid("12.alpha.@delta.b"));
+        assertFalse(BankAccount.isEmailValid("%FA#IL!@.com"));
+        assertFalse(BankAccount.isEmailValid("abc.def@mail#archive.com"));
+        assertFalse(BankAccount.isEmailValid("abc..def@mail.com"));
+    }
+
+    @Test
+    void isEmailShouldPassTest(){
+        assertTrue(BankAccount.isEmailValid("abc.def@yahoo.com"));
+        assertTrue(BankAccount.isEmailValid("abc@gmail.com"));
+        assertTrue(BankAccount.isEmailValid("abc.def@madison.org"));
+        assertTrue(BankAccount.isEmailValid("abcdef@governor.gov"));
+    }
+
+    @Test
     void constructorTest() {
         BankAccount bankAccount = new BankAccount("a@b.com", 200);
 
