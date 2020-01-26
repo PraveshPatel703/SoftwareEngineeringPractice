@@ -39,7 +39,36 @@ public class BankAccount {
         if (email.indexOf('@') == -1){
             return false;
         }
+        else if (email.charAt(0) == '@'){
+            return false;
+        }
         else {
+            if ((email.indexOf('!') != -1) || (email.indexOf('#') != -1) || (email.indexOf('%') != -1) || (email.indexOf('&') != -1)){
+                return false;
+            }
+            if (email.indexOf('.') != -1){
+                int index = email.indexOf('.');
+                if ((email.charAt(index+1) == '.') || (email.charAt(index+1) == '-') || (email.charAt(index+1) == '_') || (email.charAt(index+1) == '@')){
+                    return false;
+                }
+            }
+            if (email.indexOf('-') != -1){
+                int index = email.indexOf('-');
+                if ((email.charAt(index+1) == '.') || (email.charAt(index+1) == '-') || (email.charAt(index+1) == '_') || (email.charAt(index+1) == '@')){
+                    return false;
+                }
+            }
+            if (email.indexOf('_') != -1){
+                int index = email.indexOf('_');
+                if ((email.charAt(index+1) == '.') || (email.charAt(index+1) == '-') || (email.charAt(index+1) == '_') || (email.charAt(index+1) == '@')){
+                    return false;
+                }
+            }
+
+            int length = email.length();
+            if ((email.charAt(length - 1) == '.') || (email.charAt(length - 2) == '.')){
+                return false;
+            }
             return true;
         }
     }
