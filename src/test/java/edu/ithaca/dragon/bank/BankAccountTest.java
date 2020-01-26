@@ -26,14 +26,23 @@ class BankAccountTest {
         assertTrue(BankAccount.isEmailValid( "a@b.com"));
         assertFalse( BankAccount.isEmailValid(""));
         assertFalse(BankAccount.isEmailValid("@@spectrum.ddd"));
+        //invalid; not a border case
         assertFalse(BankAccount.isEmailValid("12.alpha.@delta.b"));
+        //invalid; not a border case
         assertFalse(BankAccount.isEmailValid("%FA#IL!@.com"));
+        //invalid; not a border case
         assertFalse(BankAccount.isEmailValid("abc.def@mail#archive.com"));
+        //invalid; not a border case
         assertFalse(BankAccount.isEmailValid("abc..def@mail.com"));
+        //invalid; not a border case
         assertTrue(BankAccount.isEmailValid("abc.def@yahoo.com"));
+        //valid; not a border case
         assertTrue(BankAccount.isEmailValid("abc@gmail.com"));
+        //valid; not a border case
         assertTrue(BankAccount.isEmailValid("abc.def@madison.org"));
+        //valid; not a border case
         assertTrue(BankAccount.isEmailValid("abcdef@governor.gov"));
+        //valid; not a border case
     }
 
 
