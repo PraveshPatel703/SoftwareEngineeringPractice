@@ -34,7 +34,6 @@ public class BankAccount {
 
     }
 
-
     public static boolean isEmailValid(String email){
         if (email.indexOf('@') == -1){
             return false;
@@ -64,7 +63,6 @@ public class BankAccount {
                     return false;
                 }
             }
-
             int length = email.length();
             if ((email.charAt(length - 1) == '.') || (email.charAt(length - 2) == '.')){
                 return false;
