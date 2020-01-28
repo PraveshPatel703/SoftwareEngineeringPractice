@@ -43,7 +43,7 @@ class BankAccountTest {
 
         //negative
         chaseBank.withdraw(3000);
-        assertEquals(-650.66,chaseBank.getBalance());
+        assertEquals(-650.66,chaseBank.getBalance(),0.0001);
     }
 
     @Test
