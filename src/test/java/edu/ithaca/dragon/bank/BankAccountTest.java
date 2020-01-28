@@ -18,12 +18,12 @@ class BankAccountTest {
         BankAccount chaseBank = new BankAccount("a@b.com", 0);
         assertEquals(0, chaseBank.getBalance());
 
-        //should throw invalid input exception i think for these next two
+        /*//should throw invalid input exception i think for these next two
         BankAccount firstTrust = new BankAccount("a@b.com", -23.12);
         firstTrust.getBalance();
 
         BankAccount keyBank = new BankAccount("a@b.com", -1200);
-        keyBank.getBalance();
+        keyBank.getBalance();*/
 
     }
 
