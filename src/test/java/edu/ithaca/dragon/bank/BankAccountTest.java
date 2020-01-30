@@ -31,34 +31,117 @@ class BankAccountTest {
     void withdrawTest() {
         BankAccount bankAccount = new BankAccount("a@b.com", 200);
         BankAccount bankOfAmerica = new BankAccount("a@b.com", 2000.01);
-        BankAccount chaseBank = new BankAccount("a@b.com", 2349.34);
 
         //positive
         bankAccount.withdraw(100);
-        assertEquals(100, bankAccount.getBalance());
+        assertEquals(100, bankAccount.getBalance(), 0.0001);
+        bankAccount.withdraw(50);
+        assertEquals(50, bankAccount.getBalance(), 0.0001);
+        bankAccount.withdraw(25);
+        assertEquals(25, bankAccount.getBalance(), 0.0001);
 
         //zero
-        bankOfAmerica.withdraw(2000.01);
-        assertEquals(0,bankOfAmerica.getBalance());
+        bankAccount.withdraw(0);
+        assertEquals(25,bankAccount.getBalance(), 0.0001);
+        bankOfAmerica.withdraw(0);
+        assertEquals(2000.01,bankOfAmerica.getBalance(), 0.0001);
 
         //negative
-        chaseBank.withdraw(3000);
-        assertEquals(-650.66,chaseBank.getBalance(),0.0001);
+        assertThrows(IllegalArgumentException.class, ()-> bankOfAmerica.withdraw(-1345.23));
+        assertThrows(IllegalArgumentException.class, ()-> bankOfAmerica.withdraw(-345.24));
+        assertThrows(IllegalArgumentException.class, ()-> bankOfAmerica.withdraw(-24));
+        assertThrows(IllegalArgumentException.class, ()-> bankOfAmerica.withdraw(-0.22));
+        assertThrows(IllegalArgumentException.class, ()-> bankOfAmerica.withdraw(-0.001));
+
+        //2 or more decimals
+        bankOfAmerica.withdraw(.01);
+        assertEquals(2000, bankOfAmerica.getBalance(), 0.0001);
+        bankOfAmerica.withdraw(.50);
+        assertEquals(1999.50, bankOfAmerica.getBalance(), 0.0001);
+        bankOfAmerica.withdraw(.75);
+        assertEquals(1998.25, bankOfAmerica.getBalance(), 0.0001);
+        assertThrows(IllegalArgumentException.class, ()-> bankOfAmerica.withdraw(0.001));
+        assertThrows(IllegalArgumentException.class, ()-> bankOfAmerica.withdraw(0.2334));
+        assertThrows(IllegalArgumentException.class, ()-> bankOfAmerica.withdraw(0.001301));
+        assertThrows(IllegalArgumentException.class, ()-> bankOfAmerica.withdraw(0.000000000000001));
+
+        //amount > balance
+        assertThrows(InsufficientFundsException.class, ()-> bankAccount.withdraw(30));
+        assertThrows(InsufficientFundsException.class, ()-> bankAccount.withdraw(50.99));
+        assertThrows(InsufficientFundsException.class, ()-> bankAccount.withdraw(123.34));
+
+        assertThrows(InsufficientFundsException.class, ()-> bankOfAmerica.withdraw(50000));
+        assertThrows(InsufficientFundsException.class, ()-> bankOfAmerica.withdraw(2000));
+        assertThrows(InsufficientFundsException.class, ()-> bankOfAmerica.withdraw(1000000));
+
+
+
+
+
+
+
+
+
     }
 
     @Test
     void isEmailValidTest(){
         assertTrue(BankAccount.isEmailValid( "a@b.com"));
         assertFalse( BankAccount.isEmailValid(""));
+
+        //new tests
+
+        //consecutive symbols
         assertFalse(BankAccount.isEmailValid("@@spectrum.ddd"));
+        assertFalse(BankAccount.isEmailValid("abc..def@mail.com"));
+        assertFalse(BankAccount.isEmailValid("a##sd@mail.com"));
+        assertFalse(BankAccount.isEmailValid("ab!!2020@mail.com"));
+        assertFalse(BankAccount.isEmailValid("ab2020_@mail.com"));
+        assertFalse(BankAccount.isEmailValid("ab!#2020@mail.com"));
+        assertFalse(BankAccount.isEmailValid("ab.-2020@mail.com"));
+        assertTrue(BankAccount.isEmailValid("ab-def@mail.com"));
+
+        assertFalse(BankAccount.isEmailValid("ab2020@mail..com"));
+        assertFalse(BankAccount.isEmailValid("johnC@ma!!l.com"));
+        assertFalse(BankAccount.isEmailValid("abc20@12$$m.com"));
+        assertFalse(BankAccount.isEmailValid("johnC@mal-.com"));
+        assertFalse(BankAccount.isEmailValid("johnC@mal&.com"));
+        assertTrue(BankAccount.isEmailValid("abdef@mail-sender.com"));
+
+        //invalid symbols
+        assertFalse(BankAccount.isEmailValid("ab!2020@mail.com"));
+        assertFalse(BankAccount.isEmailValid("ab2@20@mail.com"));
+        assertFalse(BankAccount.isEmailValid("@b20$20@mail.co$"));
+        assertFalse(BankAccount.isEmailValid("ab%2020@mail.com%"));
+        assertFalse(BankAccount.isEmailValid("#ab202^0@mail.com"));
+        assertFalse(BankAccount.isEmailValid("a(b2020@mail.com("));
+        assertFalse(BankAccount.isEmailValid("ab2#020@mail.com"));
+        assertTrue(BankAccount.isEmailValid("patel.58@gmail-test.com"));
+
+
+        //only 1 @
+        assertFalse(BankAccount.isEmailValid("ab@erwin@mail.com"));
+        assertFalse(BankAccount.isEmailValid("2020@mail@test.com"));
+        assertTrue(BankAccount.isEmailValid("patel.58@gmail-test.com"));
+
+        //valid domain
+        assertFalse(BankAccount.isEmailValid("def@yahoo.c"));
+        assertFalse(BankAccount.isEmailValid("jones34.12@y.deff"));
+        assertFalse(BankAccount.isEmailValid("ab2020@mail..com"));
+        assertTrue(BankAccount.isEmailValid("patel20@ithaca.edu"));
+        assertTrue(BankAccount.isEmailValid("Sanddi23@test.org"));
+        assertTrue(BankAccount.isEmailValid("Kobe24@Lakers.cc"));
+        assertTrue(BankAccount.isEmailValid("BundleUp@coner.gov"));
+        assertTrue(BankAccount.isEmailValid("firstproject@comp345.io"));
+
+        //old tests
+
         //invalid; not a border case
         assertFalse(BankAccount.isEmailValid("12.alpha.@delta.b"));
         //invalid; not a border case
         assertFalse(BankAccount.isEmailValid("%FA#IL!@.com"));
         //invalid; not a border case
         assertFalse(BankAccount.isEmailValid("abc.def@mail#archive.com"));
-        //invalid; not a border case
-        assertFalse(BankAccount.isEmailValid("abc..def@mail.com"));
         //invalid; not a border case
         assertTrue(BankAccount.isEmailValid("abc.def@yahoo.com"));
         //valid; not a border case
