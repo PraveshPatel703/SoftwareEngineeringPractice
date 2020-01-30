@@ -29,21 +29,49 @@ public class BankAccount {
 
     /**
      * @post reduces the balance by amount if amount is non-negative and smaller than balance
+     * @throws InsufficientFundsException if balance is smaller than amount
      */
-    public void withdraw (double amount)  {
+    public void withdraw (double amount) throws InsufficientFundsException {
+        if (amount < 0){
+            throw new IllegalArgumentException("Please enter a positive amount.");
+        }
+        if (amount > balance){
+            throw new InsufficientFundsException("Not enough in balance.");
+        }
+        String strAmount = Double.toString(amount);
+        int decIndex = strAmount.indexOf('.');
+        int count = 0;
+        for (int i = decIndex+1; i < strAmount.length(); i++){
+            count++;
+            if (count > 2){
+                throw new IllegalArgumentException("No more than 2 decimal places permitted.");
+            }
+        }
         balance -= amount;
+
 
     }
 
     public static boolean isEmailValid(String email){
-        if (email.indexOf('@') == -1){
+        if (email.indexOf('@') == -1) {
             return false;
         }
-        else if (email.charAt(0) == '@'){
+        int count = 0;
+        for (int i = 0; i < email.length(); i++){
+
+            if (email.charAt(i) == '@'){
+                count ++;
+            }
+            if (count > 1){
+                return false;
+            }
+        }
+        if (email.charAt(0) == '@'){
             return false;
         }
+
         else {
-            if ((email.indexOf('!') != -1) || (email.indexOf('#') != -1) || (email.indexOf('%') != -1) || (email.indexOf('&') != -1)){
+            if ((email.indexOf('!') != -1) || (email.indexOf('#') != -1) || (email.indexOf('%') != -1) || (email.indexOf('&') != -1) || (email.indexOf('$') != -1)  || (email.indexOf('(') != -1)  || (email.indexOf(')') != -1)){
                 return false;
             }
             if (email.indexOf('.') != -1){
@@ -68,6 +96,27 @@ public class BankAccount {
             if ((email.charAt(length - 1) == '.') || (email.charAt(length - 2) == '.')){
                 return false;
             }
+
+            int idx = email.indexOf('@');
+            String suffix = "";
+            for (int i = idx+1; i < email.length(); i++){
+                suffix += email.charAt(i);
+            }
+            count = 0;
+            for (int i = 0; i < suffix.length(); i++){
+
+                if (email.charAt(i) == '.'){
+                    count ++;
+                }
+                if (count > 1){
+                    return false;
+                }
+            }
+            if ((suffix.indexOf('_') != -1) || (suffix.indexOf('@') != -1)){
+                return false;
+            }
+
+
             return true;
         }
     }
