@@ -31,7 +31,7 @@ public class BankAccount {
      * @post reduces the balance by amount if amount is non-negative and smaller than balance
      * @throws InsufficientFundsException if balance is smaller than amount
      */
-    public void withdraw (double amount) throws InsufficientFundsException {
+    public void withdraw(double amount) throws InsufficientFundsException {
         if (amount < 0){
             throw new IllegalArgumentException("Please enter a positive amount.");
         }
@@ -124,4 +124,30 @@ public class BankAccount {
             return true;
         }
     }
+
+    /**
+     * @post increases the balance by amount if amount is non-negative and smaller than $25,000 cap limit
+     * @throws IllegalArgumentException if balance is smaller than amount
+     */
+    public void deposit(double amount) throws IllegalArgumentException {
+        if (amount < 0){
+            throw new IllegalArgumentException("Please enter a positive amount.");
+        }
+        if (amount > 25000){
+            throw new IllegalArgumentException("Exceeds cap limit.");
+        }
+        String strAmount = Double.toString(amount);
+        int decIndex = strAmount.indexOf('.');
+        int count = 0;
+        for (int i = decIndex+1; i < strAmount.length(); i++){
+            count++;
+            if (count > 2){
+                throw new IllegalArgumentException("No more than 2 decimal places permitted.");
+            }
+        }
+        balance += amount;
+
+
+    }
+
 }

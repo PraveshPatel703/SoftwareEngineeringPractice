@@ -74,14 +74,6 @@ class BankAccountTest {
         assertThrows(InsufficientFundsException.class, ()-> bankOfAmerica.withdraw(2000));
         assertThrows(InsufficientFundsException.class, ()-> bankOfAmerica.withdraw(1000000));
 
-
-
-
-
-
-
-
-
     }
 
     @Test
@@ -162,6 +154,55 @@ class BankAccountTest {
         assertEquals(200, bankAccount.getBalance());
         //check for exception thrown correctly
         assertThrows(IllegalArgumentException.class, ()-> new BankAccount("", 100));
+    }
+
+    @Test
+    void depositTest() throws InsufficientFundsException {
+        BankAccount bankAccount = new BankAccount("a@b.com", 200);
+        BankAccount bankOfAmerica = new BankAccount("a@b.com", 2000.01);
+
+        //positive
+        bankAccount.deposit(100);
+        assertEquals(300, bankAccount.getBalance(), 0.0001);
+        bankAccount.deposit(50);
+        assertEquals(350, bankAccount.getBalance(), 0.0001);
+        bankAccount.deposit(25);
+        assertEquals(375, bankAccount.getBalance(), 0.0001);
+
+        //zero
+        bankAccount.deposit(0);
+        assertEquals(375,bankAccount.getBalance(), 0.0001);
+        bankOfAmerica.deposit(0);
+        assertEquals(2000.01,bankOfAmerica.getBalance(), 0.0001);
+
+        //negative
+        assertThrows(IllegalArgumentException.class, ()-> bankOfAmerica.deposit(-1345.23));
+        assertThrows(IllegalArgumentException.class, ()-> bankOfAmerica.deposit(-345.24));
+        assertThrows(IllegalArgumentException.class, ()-> bankOfAmerica.deposit(-24));
+        assertThrows(IllegalArgumentException.class, ()-> bankOfAmerica.deposit(-0.22));
+        assertThrows(IllegalArgumentException.class, ()-> bankOfAmerica.deposit(-0.001));
+
+        //2 or more decimals
+        bankOfAmerica.deposit(24999);
+        assertEquals(26999.01, bankOfAmerica.getBalance(), 0.0001);
+        bankOfAmerica.deposit(.50);
+        assertEquals(26999.51, bankOfAmerica.getBalance(), 0.0001);
+        bankOfAmerica.deposit(.75);
+        assertEquals(27000.26, bankOfAmerica.getBalance(), 0.0001);
+        assertThrows(IllegalArgumentException.class, ()-> bankOfAmerica.deposit(0.001));
+        assertThrows(IllegalArgumentException.class, ()-> bankOfAmerica.deposit(0.2334));
+        assertThrows(IllegalArgumentException.class, ()-> bankOfAmerica.deposit(0.001301));
+        assertThrows(IllegalArgumentException.class, ()-> bankOfAmerica.deposit(0.000000000000001));
+
+        //amount > $25,000
+        assertThrows(IllegalArgumentException.class, ()-> bankAccount.deposit(30000));
+        assertThrows(IllegalArgumentException.class, ()-> bankAccount.deposit(50000.99));
+        assertThrows(IllegalArgumentException.class, ()-> bankAccount.deposit(25001.34));
+
+        assertThrows(IllegalArgumentException.class, ()-> bankOfAmerica.deposit(50000));
+        assertThrows(IllegalArgumentException.class, ()-> bankOfAmerica.deposit(25200));
+        assertThrows(IllegalArgumentException.class, ()-> bankOfAmerica.deposit(1000000));
+
     }
 
 }
