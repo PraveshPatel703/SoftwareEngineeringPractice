@@ -205,4 +205,57 @@ class BankAccountTest {
 
     }
 
+    @Test
+    void transferTest() throws InsufficientFundsException {
+        BankAccount bankAccount = new BankAccount("a@b.com", 200);
+        BankAccount bankOfAmerica = new BankAccount("a@b.com", 200);
+
+        //positive
+        bankAccount.transfer(bankOfAmerica,100);
+        assertEquals(100, bankAccount.getBalance(), 0.0001);
+        assertEquals(300, bankOfAmerica.getBalance(), 0.0001);
+
+        bankOfAmerica.transfer(bankAccount,150);
+        assertEquals(250, bankAccount.getBalance(), 0.0001);
+        assertEquals(150, bankOfAmerica.getBalance(), 0.0001);
+
+        //zero
+        bankAccount.transfer(bankOfAmerica,0);
+        assertEquals(250,bankAccount.getBalance(), 0.0001);
+        assertEquals(150,bankOfAmerica.getBalance(), 0.0001);
+
+        bankOfAmerica.transfer(bankAccount,0);
+        assertEquals(150,bankOfAmerica.getBalance(), 0.0001);
+        assertEquals(250,bankAccount.getBalance(), 0.0001);
+
+        //negative
+        assertThrows(IllegalArgumentException.class, ()-> bankOfAmerica.transfer(bankAccount, -1345.23));
+        assertThrows(IllegalArgumentException.class, ()-> bankOfAmerica.transfer(bankAccount,-345.24));
+        assertThrows(IllegalArgumentException.class, ()-> bankAccount.transfer(bankOfAmerica,-24));
+        assertThrows(IllegalArgumentException.class, ()-> bankAccount.transfer(bankOfAmerica,-0.22));
+
+        //2 or more decimals
+        bankAccount.transfer(bankOfAmerica,5.50);
+        assertEquals(155.50, bankOfAmerica.getBalance(), 0.0001);
+        assertEquals(244.50, bankAccount.getBalance(), 0.0001);
+        bankOfAmerica.transfer(bankAccount,.75);
+        assertEquals(245.25, bankAccount.getBalance(), 0.0001);
+        assertEquals(154.75, bankOfAmerica.getBalance(), 0.0001);
+
+        assertThrows(IllegalArgumentException.class, ()-> bankOfAmerica.transfer(bankAccount,0.001));
+        assertThrows(IllegalArgumentException.class, ()-> bankOfAmerica.transfer(bankAccount,0.2334));
+        assertThrows(IllegalArgumentException.class, ()-> bankAccount.transfer(bankOfAmerica,0.001301));
+        assertThrows(IllegalArgumentException.class, ()-> bankAccount.transfer(bankOfAmerica,0.000000000000001));
+
+        //amount > balance
+        assertThrows(InsufficientFundsException.class, ()-> bankAccount.transfer(bankOfAmerica,3000));
+        assertThrows(InsufficientFundsException.class, ()-> bankAccount.transfer(bankOfAmerica,245.26));
+        assertThrows(InsufficientFundsException.class, ()-> bankAccount.transfer(bankOfAmerica,280.34));
+
+        assertThrows(InsufficientFundsException.class, ()-> bankOfAmerica.transfer(bankAccount, 154.76));
+        assertThrows(InsufficientFundsException.class, ()-> bankOfAmerica.transfer(bankAccount, 200));
+        assertThrows(InsufficientFundsException.class, ()-> bankOfAmerica.transfer(bankAccount, 346.92));
+
+    }
+
 }

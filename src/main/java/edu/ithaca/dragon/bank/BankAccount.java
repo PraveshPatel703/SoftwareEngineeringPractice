@@ -51,11 +51,11 @@ public class BankAccount {
 
 
     }
+
     /**
      * checks through email string for invalid characters and invalid placement of characters
      * @post returns true if email is valid else it returns false
      */
-
     public static boolean isEmailValid(String email){
         if (email.indexOf('@') == -1) {
             return false;
@@ -146,8 +146,36 @@ public class BankAccount {
             }
         }
         balance += amount;
+    }
 
+    /**
+     * @post transferring balance decreases by amount if amount is non-negative and has upto two numbers following decimal,
+     * and receiving balance increases by amount if amount is non-negative and has upto two numbers following decimal
+     * @throws IllegalArgumentException if amount is negative or if their is three or numbers following the decimal
+     * @throws InsufficientFundsException is amount is greater than balance
+     */
+    public void transfer(BankAccount bankAccount, double amount) throws InsufficientFundsException{
 
+        if (amount < 0){
+            throw new IllegalArgumentException("can't transfer negative amount");
+        }
+
+        if (amount > balance){
+            throw new InsufficientFundsException("Balance: $"+ balance +" Amount you want to transfer: $" + amount + "EXCEEDS BALANCE");
+        }
+
+        String strAmount = Double.toString(amount);
+        int decIndex = strAmount.indexOf('.');
+        int count = 0;
+        for (int i = decIndex+1; i < strAmount.length(); i++){
+            count++;
+            if (count > 2){
+                throw new IllegalArgumentException("No more than 2 decimal places permitted.");
+            }
+        }
+
+        bankAccount.balance += amount;
+        balance -= amount;
     }
 
 }
