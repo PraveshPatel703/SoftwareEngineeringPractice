@@ -59,7 +59,7 @@ class BankAccountTest {
         bankOfAmerica.withdraw(.50);
         assertEquals(1999.50, bankOfAmerica.getBalance(), 0.0001);
         bankOfAmerica.withdraw(.75);
-        assertEquals(1998.25, bankOfAmerica.getBalance(), 0.0001);
+        assertEquals(1998.75, bankOfAmerica.getBalance(), 0.0001);
         assertThrows(IllegalArgumentException.class, ()-> bankOfAmerica.withdraw(0.001));
         assertThrows(IllegalArgumentException.class, ()-> bankOfAmerica.withdraw(0.2334));
         assertThrows(IllegalArgumentException.class, ()-> bankOfAmerica.withdraw(0.001301));
@@ -126,7 +126,7 @@ class BankAccountTest {
 
         //valid domain
         assertFalse(BankAccount.isEmailValid("def@yahoo.c"));
-        assertFalse(BankAccount.isEmailValid("jones34.12@y.deff"));
+        assertTrue(BankAccount.isEmailValid("jones34.12@y.deff"));
         assertFalse(BankAccount.isEmailValid("ab2020@mail..com"));
         assertTrue(BankAccount.isEmailValid("patel20@ithaca.edu"));
         assertTrue(BankAccount.isEmailValid("Sanddi23@test.org"));

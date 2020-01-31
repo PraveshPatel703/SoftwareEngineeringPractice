@@ -51,6 +51,10 @@ public class BankAccount {
 
 
     }
+    /**
+     * checks through email string for invalid characters and invalid placement of characters
+     * @post returns true if email is valid else it returns false
+     */
 
     public static boolean isEmailValid(String email){
         if (email.indexOf('@') == -1) {
