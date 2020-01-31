@@ -149,6 +149,8 @@ public class BankAccount {
     }
 
     /**
+     * ASSUMES bankAccount in parameter is valid
+     *
      * @post transferring balance decreases by amount if amount is non-negative and has upto two numbers following decimal,
      * and receiving balance increases by amount if amount is non-negative and has upto two numbers following decimal
      * @throws IllegalArgumentException if amount is negative or if their is three or numbers following the decimal
